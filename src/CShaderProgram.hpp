@@ -52,6 +52,32 @@ class CShaderProgram
 				std::string Shader1,
 				std::string Shader2);
 		/**
+		 * @brief Constructor
+		 *
+		 * @param Shader0 shader 0
+		 * @param Shader1 shader 1
+		 * @param Shader2 shader 2
+		 * @param Shader3 shader 3
+		 */
+		CShaderProgram(std::string Shader0,
+				std::string Shader1,
+				std::string Shader2,
+				std::string Shader3);
+		/**
+		 * @brief Constructor
+		 *
+		 * @param Shader0 shader 0
+		 * @param Shader1 shader 1
+		 * @param Shader2 shader 2
+		 * @param Shader3 shader 3
+		 * @param Shader4 shader 4
+		 */
+		CShaderProgram(std::string Shader0,
+				std::string Shader1,
+				std::string Shader2,
+				std::string Shader3,
+				std::string Shader4);
+		/**
 		 * @brief Destructor
 		 */
 		~CShaderProgram();
@@ -72,13 +98,13 @@ class CShaderProgram
 		/**
 		 * Ziska identifikator atributu
 		 * @param AttributeName jmeno atributu
-		 * @retunr vracu identifikator atributu
+		 * @return vracu identifikator atributu
 		 */
 		GLuint GetAttribute(std::string AttributeName);
 		/**
 		 * Ziska identifikator uniformni promenne
 		 * @param UniformName jmeno uniformni promenne
-		 * @retunr vracu identifikator uniformni promenne
+		 * @return vracu identifikator uniformni promenne
 		 */
 		GLuint GetUniform(std::string UniformName);
 		void Use();

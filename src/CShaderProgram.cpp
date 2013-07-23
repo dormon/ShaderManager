@@ -96,6 +96,84 @@ CShaderProgram::CShaderProgram(
 	delete S2;
 }
 
+CShaderProgram::CShaderProgram(
+		std::string Shader0,
+		std::string Shader1,
+		std::string Shader2,
+		std::string Shader3){
+
+	this->CreateShaderProgram_Prologue();
+	CShader*S0;
+	CShader*S1;
+	CShader*S2;
+	CShader*S3;
+	
+	try{
+		S0=new CShader(Shader0);
+		S1=new CShader(Shader1);
+		S2=new CShader(Shader2);
+		S3=new CShader(Shader3);
+	}catch(std::string&e){
+		std::cerr<<e<<std::endl;
+	}
+
+	glAttachShader(this->ShaderProgramID,S0->GetShaderID());
+	glAttachShader(this->ShaderProgramID,S1->GetShaderID());
+	glAttachShader(this->ShaderProgramID,S2->GetShaderID());
+	glAttachShader(this->ShaderProgramID,S3->GetShaderID());
+	this->ShaderList.push_back(S0->GetShaderID());
+	this->ShaderList.push_back(S1->GetShaderID());
+	this->ShaderList.push_back(S2->GetShaderID());
+	this->ShaderList.push_back(S3->GetShaderID());
+	this->CreateShaderProgram_Epilogue();
+	delete S0;
+	delete S1;
+	delete S2;
+	delete S3;
+}
+
+CShaderProgram::CShaderProgram(
+		std::string Shader0,
+		std::string Shader1,
+		std::string Shader2,
+		std::string Shader3,
+		std::string Shader4){
+
+	this->CreateShaderProgram_Prologue();
+	CShader*S0;
+	CShader*S1;
+	CShader*S2;
+	CShader*S3;
+	CShader*S4;
+	
+	try{
+		S0=new CShader(Shader0);
+		S1=new CShader(Shader1);
+		S2=new CShader(Shader2);
+		S3=new CShader(Shader3);
+		S4=new CShader(Shader4);
+	}catch(std::string&e){
+		std::cerr<<e<<std::endl;
+	}
+
+	glAttachShader(this->ShaderProgramID,S0->GetShaderID());
+	glAttachShader(this->ShaderProgramID,S1->GetShaderID());
+	glAttachShader(this->ShaderProgramID,S2->GetShaderID());
+	glAttachShader(this->ShaderProgramID,S3->GetShaderID());
+	glAttachShader(this->ShaderProgramID,S4->GetShaderID());
+	this->ShaderList.push_back(S0->GetShaderID());
+	this->ShaderList.push_back(S1->GetShaderID());
+	this->ShaderList.push_back(S2->GetShaderID());
+	this->ShaderList.push_back(S3->GetShaderID());
+	this->ShaderList.push_back(S4->GetShaderID());
+	this->CreateShaderProgram_Epilogue();
+	delete S0;
+	delete S1;
+	delete S2;
+	delete S3;
+	delete S4;
+}
+
 
 CShaderProgram::CShaderProgram(unsigned Num,...){
 	this->CreateShaderProgram_Prologue();//prologue of creating of shader prg.
