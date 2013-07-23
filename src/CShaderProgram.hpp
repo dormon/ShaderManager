@@ -15,13 +15,8 @@ class CShaderProgram
 {
 	private:
 		std::vector<GLuint>ShaderList;///<list of shader object
-		std::map<std::string,CShaderParameter>ParameterList;///<list of parameters
 		std::map<std::string,CShaderParameter>AttributeList;///<list of attributes
 		std::map<std::string,CShaderParameter>UniformList;///<list of uniforms
-		std::map<std::string,CShaderParameter>UniformListD;///<list of uniforms
-		std::map<std::string,CShaderParameter>UniformListV;///<list of uniforms
-		std::map<std::string,CShaderParameter>UniformListB;///<list of uniforms
-
 		GLuint ShaderProgramID;///<id of shader program
 		void CreateShaderProgram_Prologue();//prologue of creating of shader prg.
 		void CreateShaderProgram_Epilogue();//epilogue of creating of shader prg.

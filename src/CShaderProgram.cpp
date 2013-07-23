@@ -44,13 +44,10 @@ void CShaderProgram::GetParameterList(){
 			Location=GetLocation[t](this->ShaderProgramID,Buffer);//location
 			Name=std::string(Buffer);//convert buffer to string
 			CShaderParameter Param=CShaderParameter(Location,Type,Name,Size);//param
-//			CShaderParameter B=CShaderParameter(Location,Type,Name,Size);
-			this->ParameterList.insert(
+			if(t==0)this->AttributeList.insert(
 					std::pair<std::string,CShaderParameter>(Name,Param));
-			/*if(t==0)this->AttributeList.insert(
-					std::pair<std::string,CShaderParameter>(Name,B));
 			else this->UniformList.insert(
-					std::pair<std::string,CShaderParameter>(Name,B));*/
+					std::pair<std::string,CShaderParameter>(Name,Param));
 		}
 		delete[]Buffer;//free buffer
 	}
@@ -141,7 +138,7 @@ GLuint CShaderProgram::GetProgramID(){
 }
 
 GLint CShaderProgram::operator[](std::string Name){
-	return this->ParameterList[Name].Location;//uniform id
+	return this->UniformList[Name].Location;//uniform id
 }
 
 GLuint CShaderProgram::GetAttribute(std::string AttributeName){
@@ -159,20 +156,20 @@ void CShaderProgram::Use(){
 void CShaderProgram::Set(
 		std::string UniformName,
 		GLfloat v0){
-	glUniform1f(this->ParameterList[UniformName].Location,v0);
+	glUniform1f(this->UniformList[UniformName].Location,v0);
 }
 void CShaderProgram::Set(
 		std::string UniformName,
 		GLfloat v0,
 		GLfloat v1){
-	glUniform2f(this->ParameterList[UniformName].Location,v0,v1);
+	glUniform2f(this->UniformList[UniformName].Location,v0,v1);
 }
 void CShaderProgram::Set(
 		std::string UniformName,
 		GLfloat v0,
 		GLfloat v1,
 		GLfloat v2){
-	glUniform3f(this->ParameterList[UniformName].Location,v0,v1,v2);
+	glUniform3f(this->UniformList[UniformName].Location,v0,v1,v2);
 }
 void CShaderProgram::Set(
 		std::string UniformName,
@@ -180,25 +177,25 @@ void CShaderProgram::Set(
 		GLfloat v1,
 		GLfloat v2,
 		GLfloat v3){
-	glUniform4f(this->ParameterList[UniformName].Location,v0,v1,v2,v3);
+	glUniform4f(this->UniformList[UniformName].Location,v0,v1,v2,v3);
 }
 void CShaderProgram::Set(
 		std::string UniformName,
 		GLdouble v0){
-	glUniform1d(this->ParameterList[UniformName].Location,v0);
+	glUniform1d(this->UniformList[UniformName].Location,v0);
 }
 void CShaderProgram::Set(
 		std::string UniformName,
 		GLdouble v0,
 		GLdouble v1){
-	glUniform2d(this->ParameterList[UniformName].Location,v0,v1);
+	glUniform2d(this->UniformList[UniformName].Location,v0,v1);
 }
 void CShaderProgram::Set(
 		std::string UniformName,
 		GLdouble v0,
 		GLdouble v1,
 		GLdouble v2){
-	glUniform3d(this->ParameterList[UniformName].Location,v0,v1,v2);
+	glUniform3d(this->UniformList[UniformName].Location,v0,v1,v2);
 }
 void CShaderProgram::Set(
 		std::string UniformName,
@@ -206,25 +203,25 @@ void CShaderProgram::Set(
 		GLdouble v1,
 		GLdouble v2,
 		GLdouble v3){
-	glUniform4d(this->ParameterList[UniformName].Location,v0,v1,v2,v3);
+	glUniform4d(this->UniformList[UniformName].Location,v0,v1,v2,v3);
 }
 void CShaderProgram::Set(
 		std::string UniformName,
 		GLint v0){
-	glUniform1i(this->ParameterList[UniformName].Location,v0);
+	glUniform1i(this->UniformList[UniformName].Location,v0);
 }
 void CShaderProgram::Set(
 		std::string UniformName,
 		GLint v0,
 		GLint v1){
-	glUniform2i(this->ParameterList[UniformName].Location,v0,v1);
+	glUniform2i(this->UniformList[UniformName].Location,v0,v1);
 }
 void CShaderProgram::Set(
 		std::string UniformName,
 		GLint v0,
 		GLint v1,
 		GLint v2){
-	glUniform3i(this->ParameterList[UniformName].Location,v0,v1,v2);
+	glUniform3i(this->UniformList[UniformName].Location,v0,v1,v2);
 }
 void CShaderProgram::Set(
 		std::string UniformName,
@@ -232,25 +229,25 @@ void CShaderProgram::Set(
 		GLint v1,
 		GLint v2,
 		GLint v3){
-	glUniform4i(this->ParameterList[UniformName].Location,v0,v1,v2,v3);
+	glUniform4i(this->UniformList[UniformName].Location,v0,v1,v2,v3);
 }
 void CShaderProgram::Set(
 		std::string UniformName,
 		GLuint v0){
-	glUniform1ui(this->ParameterList[UniformName].Location,v0);
+	glUniform1ui(this->UniformList[UniformName].Location,v0);
 }
 void CShaderProgram::Set(
 		std::string UniformName,
 		GLuint v0,
 		GLuint v1){
-	glUniform2ui(this->ParameterList[UniformName].Location,v0,v1);
+	glUniform2ui(this->UniformList[UniformName].Location,v0,v1);
 }
 void CShaderProgram::Set(
 		std::string UniformName,
 		GLuint v0,
 		GLuint v1,
 		GLuint v2){
-	glUniform3ui(this->ParameterList[UniformName].Location,v0,v1,v2);
+	glUniform3ui(this->UniformList[UniformName].Location,v0,v1,v2);
 }
 void CShaderProgram::Set(
 		std::string UniformName,
@@ -258,25 +255,25 @@ void CShaderProgram::Set(
 		GLuint v1,
 		GLuint v2,
 		GLuint v3){
-	glUniform4ui(this->ParameterList[UniformName].Location,v0,v1,v2,v3);
+	glUniform4ui(this->UniformList[UniformName].Location,v0,v1,v2,v3);
 }
 void CShaderProgram::Set(
 		std::string UniformName,
 		GLboolean v0){
-	glUniform1i(this->ParameterList[UniformName].Location,v0);
+	glUniform1i(this->UniformList[UniformName].Location,v0);
 }
 void CShaderProgram::Set(
 		std::string UniformName,
 		GLboolean v0,
 		GLboolean v1){
-	glUniform2i(this->ParameterList[UniformName].Location,v0,v1);
+	glUniform2i(this->UniformList[UniformName].Location,v0,v1);
 }
 void CShaderProgram::Set(
 		std::string UniformName,
 		GLboolean v0,
 		GLboolean v1,
 		GLboolean v2){
-	glUniform3i(this->ParameterList[UniformName].Location,v0,v1,v2);
+	glUniform3i(this->UniformList[UniformName].Location,v0,v1,v2);
 }
 void CShaderProgram::Set(
 		std::string UniformName,
@@ -284,13 +281,13 @@ void CShaderProgram::Set(
 		GLboolean v1,
 		GLboolean v2,
 		GLboolean v3){
-	glUniform4i(this->ParameterList[UniformName].Location,v0,v1,v2,v3);
+	glUniform4i(this->UniformList[UniformName].Location,v0,v1,v2,v3);
 }
 void CShaderProgram::Set(
 		std::string UniformName,
 		GLsizei Count,
 		GLfloat*Value){
-	CShaderParameter Param=this->ParameterList[UniformName];
+	CShaderParameter Param=this->UniformList[UniformName];
 	switch(Param.Type){
 		case GL_FLOAT:
 			glUniform1fv(Param.Location,Count,Value);
@@ -312,7 +309,7 @@ void CShaderProgram::Set(
 		std::string UniformName,
 		GLsizei Count,
 		GLdouble*Value){
-	CShaderParameter Param=this->ParameterList[UniformName];
+	CShaderParameter Param=this->UniformList[UniformName];
 	switch(Param.Type){
 		case GL_DOUBLE:
 			glUniform1dv(Param.Location,Count,Value);
@@ -334,7 +331,7 @@ void CShaderProgram::Set(
 		std::string UniformName,
 		GLsizei Count,
 		GLint*Value){
-	CShaderParameter Param=this->ParameterList[UniformName];
+	CShaderParameter Param=this->UniformList[UniformName];
 	switch(Param.Type){
 		case GL_INT:
 			glUniform1iv(Param.Location,Count,(const GLint*)Value);
@@ -356,7 +353,7 @@ void CShaderProgram::Set(
 		std::string UniformName,
 		GLsizei Count,
 		GLuint*Value){
-	CShaderParameter Param=this->ParameterList[UniformName];
+	CShaderParameter Param=this->UniformList[UniformName];
 	switch(Param.Type){
 		case GL_UNSIGNED_INT:
 			glUniform1uiv(Param.Location,Count,Value);
@@ -378,7 +375,7 @@ void CShaderProgram::Set(
 		std::string UniformName,
 		GLsizei Count,
 		GLboolean*Value){
-	CShaderParameter Param=this->ParameterList[UniformName];
+	CShaderParameter Param=this->UniformList[UniformName];
 	switch(Param.Type){
 		case GL_BOOL:
 			glUniform1iv(Param.Location,Count,(const GLint*)Value);
@@ -401,7 +398,7 @@ void CShaderProgram::Set(
 		GLsizei Count,
 		GLboolean Transpose,
 		GLfloat*Value){
-	CShaderParameter Param=this->ParameterList[UniformName];
+	CShaderParameter Param=this->UniformList[UniformName];
 	switch(Param.Type){
 		case GL_FLOAT_MAT2:
 			glUniformMatrix2fv(Param.Location,Count,Transpose,(const GLfloat*)Value);
@@ -439,7 +436,7 @@ void CShaderProgram::Set(
 		GLsizei Count,
 		GLboolean Transpose,
 		GLdouble*Value){
-	CShaderParameter Param=this->ParameterList[UniformName];
+	CShaderParameter Param=this->UniformList[UniformName];
 	switch(Param.Type){
 		case GL_DOUBLE_MAT2:
 			glUniformMatrix2dv(Param.Location,Count,Transpose,(const GLdouble*)Value);
