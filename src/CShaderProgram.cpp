@@ -1,6 +1,8 @@
 #include"CShaderProgram.hpp"
 #include"ShaderInfo.hpp"
 
+namespace NDormon{
+
 void CShaderProgram::CreateShaderProgram_Prologue(){
 	this->ShaderProgramID=glCreateProgram();//creates a shader program
 	if(!this->ShaderProgramID)//something is wrong
@@ -548,6 +550,6 @@ void CShaderProgram::Set(
 	}
 }
 
-
+}
 
 

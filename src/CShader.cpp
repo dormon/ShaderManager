@@ -35,13 +35,13 @@ unsigned char*ReadWholeFile(int*Len,std::string File){
 };
 
 
-CShader::CShader(GLenum type,std::string text){
+NDormon::CShader::CShader(GLenum type,std::string text){
 	this->Text=text;//text
 	this->Type=type;//type
 	this->CompileShader();
 }
 
-CShader::CShader(std::string File){
+NDormon::CShader::CShader(std::string File){
 	int length;//lenght of file in bytes
 	char*Buffer=(char*)ShaderManager::ReadWholeFile(&length,File);//read whole file
 	this->Text=std::string((char*)Buffer,length);//convert to std::string
@@ -62,11 +62,11 @@ CShader::CShader(std::string File){
 	this->CompileShader();
 }
 
-CShader::~CShader(){
+NDormon::CShader::~CShader(){
 	glDeleteShader(this->ShaderID);//deletes a shader
 }
 
-void CShader::CompileShader(){
+void NDormon::CShader::CompileShader(){
 	this->ShaderID=glCreateShader(this->Type);//get shader id
 	if(!this->ShaderID)//something is wrong
 		throw std::string("glCreateShader failed");//+GetGLError());//error message
@@ -81,6 +81,6 @@ void CShader::CompileShader(){
 		throw std::string("Shader compilation failed");//+GetGLError());//error message
 }
 
-GLuint CShader::GetShaderID(){
+GLuint NDormon::CShader::GetShaderID(){
 	return this->ShaderID;//id of shader
 }

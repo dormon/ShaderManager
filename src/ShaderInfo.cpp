@@ -1,5 +1,7 @@
 #include"ShaderInfo.hpp"
 
+namespace NDormon{
+
 std::string GetShaderInfo(GLuint ID){
 	int Len=0;//length of message
 	glGetShaderiv(ID,GL_INFO_LOG_LENGTH,&Len);//gets length of message
@@ -17,3 +19,5 @@ std::string GetGLError(){
 	return "";//return empty strinng
 }
 */
+
+}
