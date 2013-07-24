@@ -2,10 +2,10 @@ cmake_minimum_required (VERSION 2.6)
 project (ShaderManager)
 
 add_library(ShaderManager STATIC
-		src/CShader.cpp
-		src/CShaderParameter.cpp
-		src/CShaderProgram.cpp
-		src/ShaderInfo.cpp
+	src/CShader.cpp
+	src/CShaderParameter.cpp
+	src/CShaderProgram.cpp
+	src/ShaderInfo.cpp
 	)
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/CMake/modules/")
@@ -18,16 +18,6 @@ if(SDL_FOUND)
 else(SDL_FOUND)
 	message("SDL not found")
 endif(SDL_FOUND)
-
-find_package(GLU REQUIRED)
-if(GLU_FOUND)
-	message("GLU found")
-	include_directories(${GLU_INCLUDE_DIR})
-	target_link_libraries(ShaderManager ${GLU_LIBRARY})
-else(GLU_FOUND)
-	message("GLU not found")
-endif(GLU_FOUND)
-
 
 find_package(GLEW REQUIRED)
 if(GLEW_FOUND)
