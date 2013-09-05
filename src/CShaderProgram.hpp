@@ -39,6 +39,12 @@ namespace NDormon{
 			 * @brief Constructor
 			 *
 			 * @param Shader0 shader 0
+			 */
+			CShaderProgram(std::string Shader0);
+			/**
+			 * @brief Constructor
+			 *
+			 * @param Shader0 shader 0
 			 * @param Shader1 shader 1
 			 */
 			CShaderProgram(std::string Shader0,

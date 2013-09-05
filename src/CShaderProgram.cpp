@@ -55,6 +55,15 @@ void CShaderProgram::GetParameterList(){
 	}
 }
 
+CShaderProgram::CShaderProgram(std::string Shader0){
+	this->CreateShaderProgram_Prologue();
+	CShader*S0=new CShader(Shader0);
+	glAttachShader(this->ShaderProgramID,S0->GetShaderID());
+	this->ShaderList.push_back(S0->GetShaderID());
+	this->CreateShaderProgram_Epilogue();
+	delete S0;
+}
+
 CShaderProgram::CShaderProgram(std::string Shader0,std::string Shader1){
 	this->CreateShaderProgram_Prologue();
 	CShader*S0=new CShader(Shader0);
