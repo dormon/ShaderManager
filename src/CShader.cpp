@@ -45,7 +45,7 @@ NDormon::CShader::CShader(std::string File){
 	int length;//lenght of file in bytes
 	char*Buffer=(char*)ShaderManager::ReadWholeFile(&length,File);//read whole file
 	this->Text=std::string((char*)Buffer,length);//convert to std::string
-	switch(ShaderManager::FileTypeSwitch(File,6,"vert","vp","frag","fp","geom","gp","cont","cp","eval","ep")){//type
+	switch(ShaderManager::FileTypeSwitch(File,12,"vert","vp","frag","fp","geom","gp","cont","cp","eval","ep","comp","mp")){//type
 		case 0:
 		case 1:this->Type=GL_VERTEX_SHADER;break;//vertex shader
 		case 2:
@@ -56,6 +56,8 @@ NDormon::CShader::CShader(std::string File){
 		case 7:this->Type=GL_TESS_CONTROL_SHADER;break;//control shader
 		case 8:
 		case 9:this->Type=GL_TESS_EVALUATION_SHADER;break;//evaluation shader
+		case 10:
+		case 11:this->Type=GL_COMPUTE_SHADER;break;
 		default:throw std::string("Wrong file extension for shader");break;//unknown
 	}
 	delete[]Buffer;//free buffer data
