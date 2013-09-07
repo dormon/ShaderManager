@@ -16,8 +16,6 @@ void CShaderProgram::CreateShaderProgram_Epilogue(){
 	if(glGetError()!=GL_NO_ERROR)std::cerr<<"glLinkProgram"<<std::endl;
 	std::cerr<<GetShaderInfo(this->ShaderProgramID);
 	int Status;//status of linking
-	if(glIsProgram(this->ShaderProgramID))
-		std::cerr<<"je to program"<<std::endl;
 	glGetProgramiv(this->ShaderProgramID,GL_LINK_STATUS,&Status);//status
 	if(glGetError()!=GL_NO_ERROR)std::cerr<<"glGetProgramiv"<<std::endl;
 	if(Status==GL_FALSE)//something is wrong
