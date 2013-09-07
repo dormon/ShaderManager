@@ -70,15 +70,19 @@ NDormon::CShader::~CShader(){
 
 void NDormon::CShader::CompileShader(){
 	this->ShaderID=glCreateShader(this->Type);//get shader id
+	if(glGetError()!=GL_NO_ERROR)std::cerr<<"glCreateShader"<<std::endl;
 	if(!this->ShaderID)//something is wrong
 		throw std::string("glCreateShader failed");//+GetGLError());//error message
 	GLchar*ptr[1]={(GLchar*)this->Text.data()};//retype
 	glShaderSource(this->ShaderID,1,(const GLchar**)ptr,NULL);//load shader text
+	if(glGetError()!=GL_NO_ERROR)std::cerr<<"glShaderSource"<<std::endl;
 	glCompileShader(this->ShaderID);//compile shader
+	if(glGetError()!=GL_NO_ERROR)std::cerr<<"glCompileShader"<<std::endl;
 	std::string Log=GetShaderInfo(this->ShaderID);
 	if(!Log.empty())std::cout<<Log<<std::endl;//print out log
 	GLint Status;//status of compilation
 	glGetShaderiv(this->ShaderID,GL_COMPILE_STATUS,&Status);//get status
+	if(glGetError()!=GL_NO_ERROR)std::cerr<<"glGetShaderiv"<<std::endl;
 	if(Status==GL_FALSE)//something is wrong
 		throw std::string("Shader compilation failed");//+GetGLError());//error message
 }
