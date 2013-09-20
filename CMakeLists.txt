@@ -5,7 +5,6 @@ add_library(ShaderManager STATIC
 	src/CShader.cpp
 	src/CShaderParameter.cpp
 	src/CShaderProgram.cpp
-	src/ShaderInfo.cpp
 	)
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/CMake/modules/")

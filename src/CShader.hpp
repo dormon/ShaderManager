@@ -12,10 +12,11 @@ namespace NDormon{
 	class CShader
 	{
 		private:
-			std::string Text;///contains shader test
-			GLuint ShaderID;///id of shader
-			GLenum Type;///type of shader (vertex,fragment,geometry,...)
-			void CompileShader();/// complipe shader
+			std::string Text;///<contains shader test
+			GLuint ShaderID;///<id of shader
+			GLenum Type;///<type of shader (vertex,fragment,geometry,...)
+			void CompileShader();///<compile shader
+			std::string GetShaderInfo(GLuint ID);///<gets shader info
 		public:
 			/**
 			 * Constructor

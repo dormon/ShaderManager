@@ -23,6 +23,7 @@ namespace NDormon{
 			void CreateShaderProgram_Prologue();//prologue of creating of shader prg.
 			void CreateShaderProgram_Epilogue();//epilogue of creating of shader prg.
 			void GetParameterList();
+			std::string GetProgramInfo(GLuint ID);
 		public:
 			/**
 			 * Constructor
