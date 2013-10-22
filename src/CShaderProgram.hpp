@@ -7,6 +7,8 @@
 #include<map>
 #include"CShader.hpp"
 #include"CShaderParameter.hpp"
+#include"CShaderSubroutine.hpp"
+#include"CShaderProgramMacro.hpp"
 
 namespace NDormon{
 
@@ -19,12 +21,15 @@ namespace NDormon{
 			std::vector<GLuint>ShaderList;///<list of shader object
 			std::map<std::string,CShaderParameter>AttributeList;///<list of attributes
 			std::map<std::string,CShaderParameter>UniformList;///<list of uniforms
+			CShaderSubroutine Subroutines[6];///subroutines in shaders
 			GLuint ShaderProgramID;///<id of shader program
 			void CreateShaderProgram_Prologue();//prologue of creating of shader prg.
 			void CreateShaderProgram_Epilogue();//epilogue of creating of shader prg.
 			void GetParameterList();
+			void GetSubroutineUniformList();
 			std::string GetProgramInfo(GLuint ID);
 		public:
+			GLint WorkGroupSize[3];///< work group size
 			/**
 			 * Constructor
 			 * @param Shader list of shaders
@@ -116,8 +121,49 @@ namespace NDormon{
 			 * @return vracu identifikator uniformni promenne
 			 */
 			GLuint GetUniform(std::string UniformName);
+			/**
+			 * @brief Sets this shader as active
+			 */
 			void Use();
+			/**
+			 * @brief Sets subroutine with name SubroutineName as active in Uniform
+			 *
+			 * @param ShaderType type of shader
+			 * @param Uniform uniform name
+			 * @param SubroutineName subroutine name
+			 */
+			void SetSubroutine(GLenum ShaderType,std::string Uniform,
+					unsigned OffSet,std::string SubroutineName);
 
+			DEFDEFFCE(1,f)
+			DEFDEFFCE(2,f)
+			DEFDEFFCE(3,f)
+			DEFDEFFCE(4,f)
+			DEFDEFFCE(1,d)
+			DEFDEFFCE(2,d)
+			DEFDEFFCE(3,d)
+			DEFDEFFCE(4,d)
+			DEFDEFFCE(1,i)
+			DEFDEFFCE(2,i)
+			DEFDEFFCE(3,i)
+			DEFDEFFCE(4,i)
+			DEFDEFFCE(1,ui)
+			DEFDEFFCE(2,ui)
+			DEFDEFFCE(3,ui)
+			DEFDEFFCE(4,ui)
+			DEFDEFFCE(1,boolean)
+			DEFDEFFCE(2,boolean)
+			DEFDEFFCE(3,boolean)
+			DEFDEFFCE(4,boolean)
+			DEFDEFFCEV(f)
+			DEFDEFFCEV(d)
+			DEFDEFFCEV(i)
+			DEFDEFFCEV(ui)
+			DEFDEFFCEV(boolean)
+
+
+
+			/*
 			void Set(std::string UniformName,
 					GLfloat v0);
 			void Set(std::string UniformName,
@@ -162,7 +208,7 @@ namespace NDormon{
 			void Set(std::string UniformName,GLsizei Count,GLdouble*Value);
 			void Set(std::string UniformName,GLsizei Count,GLint*Value);
 			void Set(std::string UniformName,GLsizei Count,GLuint*Value);
-			void Set(std::string UniformName,GLsizei Count,GLboolean*Value);
+			void Set(std::string UniformName,GLsizei Count,GLboolean*Value);*/
 			void Set(std::string UniformName,GLsizei Count,
 					GLboolean Transpose,GLfloat*Value);
 			void Set(std::string UniformName,GLsizei Count,

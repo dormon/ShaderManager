@@ -18,6 +18,11 @@ namespace NDormon{
 		if(Status==GL_FALSE)//something is wrong
 			throw std::string("Shader linking failed");//+GetGLError());//error message
 		this->GetParameterList();//get list of shader program parameter
+		this->GetSubroutineUniformList();
+		//std::cerr<<"DORMONA"<<std::endl;
+		//glGetProgramiv(this->ShaderProgramID,GL_COMPUTE_WORK_GROUP_SIZE,
+		//		this->WorkGroupSize);
+		//std::cerr<<"DORMONB"<<std::endl;
 	}
 
 	void CShaderProgram::GetParameterList(){
@@ -41,9 +46,12 @@ namespace NDormon{
 				GLint Size;//size of parameter
 				std::string Name;//name of parameter
 				GLint Location;//location of parameter
-				GetActive[t](this->ShaderProgramID,i,BufLen,NULL,&Size,&Type,Buffer);
+				GLsizei Length;
+				GetActive[t](this->ShaderProgramID,i,BufLen,&Length,&Size,&Type,Buffer);
+				if(Size>1)Buffer[Length-3]='\0';//get rid of [0] part
 				Location=GetLocation[t](this->ShaderProgramID,Buffer);//location
 				Name=std::string(Buffer);//convert buffer to string
+				//std::cerr<<"Name: "<<Name<<std::endl;
 				CShaderParameter Param=CShaderParameter(Location,Type,Name,Size);//param
 				if(t==0)this->AttributeList.insert(
 						std::pair<std::string,CShaderParameter>(Name,Param));
@@ -53,6 +61,95 @@ namespace NDormon{
 			delete[]Buffer;//free buffer
 		}
 	}
+	void CShaderProgram::GetSubroutineUniformList(){
+		GLenum ShaderType[]={
+			GL_VERTEX_SHADER,
+			GL_TESS_CONTROL_SHADER,
+			GL_TESS_EVALUATION_SHADER,
+			GL_GEOMETRY_SHADER,
+			GL_FRAGMENT_SHADER,
+			GL_COMPUTE_SHADER
+		};
+		for(int i=0;i<6;++i){//loop over shader types
+			GLint NumSubroutines;//number of subroutines in this shader
+			GLsizei MaxSubroutineNameSize;//max legth of name of subroutine
+			glGetProgramStageiv(this->ShaderProgramID,ShaderType[i],//get number of sub.
+					GL_ACTIVE_SUBROUTINES,&NumSubroutines);
+			if(NumSubroutines>0){//there are subroutines
+				glGetProgramStageiv(this->ShaderProgramID,ShaderType[i],//max lenght
+						GL_ACTIVE_SUBROUTINE_MAX_LENGTH,&MaxSubroutineNameSize);
+				char*BufferName=new char[MaxSubroutineNameSize];//allocate buffer
+
+				for(int sub=0;sub<NumSubroutines;++sub){//loop over subroutines
+					glGetActiveSubroutineName(this->ShaderProgramID,ShaderType[i],sub,
+							MaxSubroutineNameSize,NULL,BufferName);//obtain name of subroutine
+					GLuint Location=glGetSubroutineIndex(this->ShaderProgramID,
+							ShaderType[i],BufferName);//obtain index of subroutine
+					std::string Name=std::string(BufferName);//convert buffer to string
+					this->Subroutines[i].SubroutineList.insert(//insert subroutine
+							std::pair<std::string,GLuint>(Name,Location));
+				}
+				delete[]BufferName;//free buffer
+			}
+
+			GLint NumSubroutineUniforms;//number of subroutine uniforms
+			GLint MaxSubroutineUniformNameSize;//max legth of subroutine uniforms
+
+			glGetProgramStageiv(this->ShaderProgramID,ShaderType[i],//get number
+					GL_ACTIVE_SUBROUTINE_UNIFORMS,&NumSubroutineUniforms);
+			if(NumSubroutineUniforms){//there are subroutine uniforms
+				unsigned ActIndex=0;
+				glGetProgramStageiv(this->ShaderProgramID,ShaderType[i],//get lenght
+						GL_ACTIVE_SUBROUTINE_UNIFORM_MAX_LENGTH,&MaxSubroutineUniformNameSize);
+				char*BufferName=new char[MaxSubroutineNameSize];//allocate buffer
+				for(int sub=0;sub<NumSubroutineUniforms;++sub){
+					GLint Size;
+					glGetActiveSubroutineUniformiv(this->ShaderProgramID,ShaderType[i],sub,
+							GL_UNIFORM_SIZE,&Size);
+					GLsizei Length;
+					glGetActiveSubroutineUniformName(this->ShaderProgramID,ShaderType[i],sub,
+							MaxSubroutineUniformNameSize,&Length,BufferName);//obtain name
+					if(Size>1)BufferName[Length-3]='\0';
+					std::string Name=std::string(BufferName);
+					GLint NumCompatible;
+					glGetActiveSubroutineUniformiv(this->ShaderProgramID,ShaderType[i],sub,
+							GL_NUM_COMPATIBLE_SUBROUTINES,&NumCompatible);
+					GLuint Location;
+					Location=glGetSubroutineUniformLocation(this->ShaderProgramID,
+							ShaderType[i],BufferName);
+					CShaderSubroutineUniform ShaderSubroutineUniform=
+						CShaderSubroutineUniform(Location,Size,NumCompatible,Name,ActIndex);
+					ActIndex+=Size;
+					this->Subroutines[i].SubroutineUniformList.insert(
+							std::pair<std::string,CShaderSubroutineUniform>(Name,ShaderSubroutineUniform));
+				}
+				delete[]BufferName;//free buffer
+				this->Subroutines[i].NumIndices=ActIndex;
+				this->Subroutines[i].Indices=new GLuint[this->Subroutines[i].NumIndices];
+				for(GLsizei ind=0;ind<this->Subroutines[i].NumIndices;++ind)
+					this->Subroutines[i].Indices[ind]=0;
+			}
+		}
+	}
+	void CShaderProgram::SetSubroutine(GLenum ShaderType,std::string Uniform,unsigned OffSet,
+					std::string SubroutineName){
+		int WH=0;
+		switch(ShaderType){
+			case GL_VERTEX_SHADER:WH=0;break;
+			case GL_TESS_CONTROL_SHADER:WH=1;break;
+			case GL_TESS_EVALUATION_SHADER:WH=2;break;
+			case GL_GEOMETRY_SHADER:WH=3;break;
+			case GL_FRAGMENT_SHADER:WH=4;break;
+			case GL_COMPUTE_SHADER:WH=5;break;
+		}
+		this->Subroutines[WH].Indices[
+			this->Subroutines[WH].SubroutineUniformList[Uniform].Index+OffSet
+		]=this->Subroutines[WH].SubroutineList[SubroutineName];
+		glUniformSubroutinesuiv(ShaderType,
+				this->Subroutines[WH].NumIndices,
+				this->Subroutines[WH].Indices);
+	}
+
 
 	std::string CShaderProgram::GetProgramInfo(GLuint ID){
 		int Len=0;//length of message
@@ -249,7 +346,33 @@ namespace NDormon{
 	void CShaderProgram::Use(){
 		glUseProgram(this->ShaderProgramID);
 	}
+	DEFFCE(1,f)
+	DEFFCE(2,f)
+	DEFFCE(3,f)
+	DEFFCE(4,f)
+	DEFFCE(1,d)
+	DEFFCE(2,d)
+	DEFFCE(3,d)
+	DEFFCE(4,d)
+	DEFFCE(1,i)
+	DEFFCE(2,i)
+	DEFFCE(3,i)
+	DEFFCE(4,i)
+	DEFFCE(1,ui)
+	DEFFCE(2,ui)
+	DEFFCE(3,ui)
+	DEFFCE(4,ui)
+	DEFFCE(1,boolean)
+	DEFFCE(2,boolean)
+	DEFFCE(3,boolean)
+	DEFFCE(4,boolean)
+	DEFFCEV(f)
+	DEFFCEV(d)
+	DEFFCEV(i)
+	DEFFCEV(ui)
+	DEFFCEV(boolean)
 
+/*
 	void CShaderProgram::Set(
 			std::string UniformName,
 			GLfloat v0){
@@ -490,6 +613,7 @@ namespace NDormon{
 				break;
 		}
 	}
+	*/
 	void CShaderProgram::Set(
 			std::string UniformName,
 			GLsizei Count,
