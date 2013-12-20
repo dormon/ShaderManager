@@ -336,11 +336,29 @@ namespace NDormon{
 	}
 
 	GLuint CShaderProgram::GetAttribute(std::string AttributeName){
-		return glGetAttribLocation(this->ShaderProgramID,AttributeName.data());
+		return this->AttributeList[AttributeName].Location;
+		//return glGetAttribLocation(this->ShaderProgramID,AttributeName.data());
+	}
+
+	GLenum CShaderProgram::GetAttributeType(std::string AttributeName){
+		return this->AttributeList[AttributeName].Type;
+	}
+
+	GLint CShaderProgram::GetAttributeSize(std::string AttributeName){
+		return this->AttributeList[AttributeName].Size;
 	}
 
 	GLuint CShaderProgram::GetUniform(std::string UniformName){
-		return glGetUniformLocation(this->ShaderProgramID,UniformName.data());
+		return this->UniformList[UniformName].Location;
+		//return glGetUniformLocation(this->ShaderProgramID,UniformName.data());
+	}
+	
+	GLenum CShaderProgram::GetUniformType(std::string UniformName){
+		return this->UniformList[UniformName].Type;
+	}
+	
+	GLint CShaderProgram::GetUniformSize(std::string UniformName){
+		return this->UniformList[UniformName].Size;
 	}
 
 	void CShaderProgram::Use(){
@@ -688,6 +706,58 @@ namespace NDormon{
 				break;
 			default:
 				break;
+		}
+	}
+	
+	GLenum ComplexTypeToSimpleType(GLenum Type){
+		switch(Type){
+			case GL_FLOAT:return GL_FLOAT;
+			case GL_FLOAT_VEC2:return GL_FLOAT;
+			case GL_FLOAT_VEC3:return GL_FLOAT;
+			case GL_FLOAT_VEC4:return GL_FLOAT;
+			case GL_DOUBLE:return GL_DOUBLE;
+			case GL_DOUBLE_VEC2:return GL_DOUBLE;
+			case GL_DOUBLE_VEC3:return GL_DOUBLE;
+			case GL_DOUBLE_VEC4:return GL_DOUBLE;
+			case GL_INT:return GL_INT;
+			case GL_INT_VEC2:return GL_INT;
+			case GL_INT_VEC3:return GL_INT;
+			case GL_INT_VEC4:return GL_INT;
+			case GL_UNSIGNED_INT:return GL_UNSIGNED_INT;
+			case GL_UNSIGNED_INT_VEC2:return GL_UNSIGNED_INT;
+			case GL_UNSIGNED_INT_VEC3:return GL_UNSIGNED_INT;
+			case GL_UNSIGNED_INT_VEC4:return GL_UNSIGNED_INT;
+			case GL_BOOL:return GL_BOOL;
+			case GL_BOOL_VEC2:return GL_BOOL;
+			case GL_BOOL_VEC3:return GL_BOOL;
+			case GL_BOOL_VEC4:return GL_BOOL;
+			default:return GL_FALSE;
+		}
+	}
+
+	GLint ComplexTypeToSize(GLenum Type){
+		switch(Type){
+			case GL_FLOAT:return 1;
+			case GL_FLOAT_VEC2:return 2;
+			case GL_FLOAT_VEC3:return 3;
+			case GL_FLOAT_VEC4:return 4;
+			case GL_DOUBLE:return 1;
+			case GL_DOUBLE_VEC2:return 2;
+			case GL_DOUBLE_VEC3:return 3;
+			case GL_DOUBLE_VEC4:return 4;
+			case GL_INT:return 1;
+			case GL_INT_VEC2:return 2;
+			case GL_INT_VEC3:return 3;
+			case GL_INT_VEC4:return 4;
+			case GL_UNSIGNED_INT:return 1;
+			case GL_UNSIGNED_INT_VEC2:return 2;
+			case GL_UNSIGNED_INT_VEC3:return 3;
+			case GL_UNSIGNED_INT_VEC4:return 4;
+			case GL_BOOL:return 1;
+			case GL_BOOL_VEC2:return 2;
+			case GL_BOOL_VEC3:return 3;
+			case GL_BOOL_VEC4:return 4;
+			default:return 0;
 		}
 	}
 

@@ -116,11 +116,43 @@ namespace NDormon{
 			 */
 			GLuint GetAttribute(std::string AttributeName);
 			/**
+			 * @brief Returns attribute type
+			 *
+			 * @param AttributeName attribute name
+			 *
+			 * @return type of attribute
+			 */
+			GLenum GetAttributeType(std::string AttributeName);
+			/**
+			 * @brief Returns size of attribute's array
+			 *
+			 * @param AttributeName attribute name
+			 *
+			 * @return size of attribute's array
+			 */
+			GLint GetAttributeSize(std::string AttributeName);
+			/**
 			 * Ziska identifikator uniformni promenne
 			 * @param UniformName jmeno uniformni promenne
 			 * @return vracu identifikator uniformni promenne
 			 */
 			GLuint GetUniform(std::string UniformName);
+			/**
+			 * @brief Returns uniform type
+			 *
+			 * @param UniformName uniform name
+			 *
+			 * @return type of uniform
+			 */
+			GLenum GetUniformType(std::string UniformName);
+			/**
+			 * @brief Returns size of uniform's array
+			 *
+			 * @param UniformName uniform name
+			 *
+			 * @return size of uniform's array
+			 */
+			GLint GetUniformSize(std::string UniformName);
 			/**
 			 * @brief Sets this shader as active
 			 */
@@ -214,7 +246,23 @@ namespace NDormon{
 			void Set(std::string UniformName,GLsizei Count,
 					GLboolean Transpose,GLdouble*Value);
 	};
+	/**
+	 * @brief Function converts complex type (GL_FLOAT_VEC3 to GL_FLOAT)
+	 *
+	 * @param Type OpenGL Type GL_FLOAT_VEC2, ...
+	 *
+	 * @return GL_FLOAT, ...
+	 */
+	GLenum ComplexTypeToSimpleType(GLenum Type);
 
+	/**
+	 * @brief Function converts complex type (GL_FLOAT_VEC3 to 3)
+	 *
+	 * @param Type OpenGL Type GL_FLOAT_VEC2, ...
+	 *
+	 * @return 2, ...
+	 */
+	GLint ComplexTypeToSize(GLenum Type);
 }
 
 #endif//_CSHADERPROGRAM_HPP_

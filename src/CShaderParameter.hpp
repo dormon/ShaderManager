@@ -28,6 +28,7 @@ namespace NDormon{
 			CShaderParameter(){};
 	};
 
+
 }
 
 #endif//_CSHADERPARAMETER_HPP_
