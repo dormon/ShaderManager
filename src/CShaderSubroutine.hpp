@@ -21,8 +21,11 @@ namespace NDormon{
 			 * @brief List of subroutines
 			 */
 			std::map<std::string,GLuint>SubroutineList;
-			GLuint*Indices;
-			GLsizei NumIndices;
+			GLuint*Indices;///<
+			GLsizei NumIndices;///<
+			/**
+			 * @brief Destructor
+			 */
 			~CShaderSubroutine();
 	};
 }

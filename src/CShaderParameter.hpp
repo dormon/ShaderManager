@@ -12,10 +12,10 @@ namespace NDormon{
 	class CShaderParameter
 	{
 		public:
-			GLint Location;/// parameter location
-			GLenum Type;/// parameter type
-			std::string Name;/// parameter name
-			GLint Size;/// sizeof parameter
+			GLint Location;///< parameter location
+			GLenum Type;///< parameter type
+			std::string Name;///< parameter name
+			GLint Size;///< sizeof parameter
 			/**
 			 * @brief Constructor
 			 *

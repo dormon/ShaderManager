@@ -23,11 +23,11 @@ namespace NDormon{
 			std::map<std::string,CShaderParameter>UniformList;///<list of uniforms
 			CShaderSubroutine Subroutines[6];///subroutines in shaders
 			GLuint ShaderProgramID;///<id of shader program
-			void CreateShaderProgram_Prologue();//prologue of creating of shader prg.
-			void CreateShaderProgram_Epilogue();//epilogue of creating of shader prg.
-			void GetParameterList();
-			void GetSubroutineUniformList();
-			std::string GetProgramInfo(GLuint ID);
+			void CreateShaderProgram_Prologue();///<prologue of creating of shader prg.
+			void CreateShaderProgram_Epilogue();///<epilogue of creating of shader prg.
+			void GetParameterList();///<obtain shader parameters
+			void GetSubroutineUniformList();///<obtain shader subroutines
+			std::string GetProgramInfo(GLuint ID);///<obtain program info log
 		public:
 			GLint WorkGroupSize[3];///< work group size
 			/**

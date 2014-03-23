@@ -43,9 +43,6 @@ namespace NDormon{
 	}
 
 	CShader::CShader(std::string File){
-		int length;//lenght of file in bytes
-		char*Buffer=(char*)ShaderManager::ReadWholeFile(&length,File);//read whole file
-		this->Text=std::string((char*)Buffer,length);//convert to std::string
 		switch(ShaderManager::FileTypeSwitch(File,12,"vert","vp","frag","fp","geom","gp","cont","cp","eval","ep","comp","mp")){//type
 			case 0:
 			case 1:this->Type=GL_VERTEX_SHADER;break;//vertex shader
@@ -61,6 +58,9 @@ namespace NDormon{
 			case 11:this->Type=GL_COMPUTE_SHADER;break;
 			default:throw std::string("Wrong file extension for shader");break;//unknown
 		}
+		int length;//lenght of file in bytes
+		char*Buffer=(char*)ShaderManager::ReadWholeFile(&length,File);//read whole file
+		this->Text=std::string((char*)Buffer,length);//convert to std::string
 		delete[]Buffer;//free buffer data
 		this->CompileShader();
 	}
@@ -77,7 +77,7 @@ namespace NDormon{
 		glShaderSource(this->ShaderID,1,(const GLchar**)ptr,NULL);//load shader text
 		glCompileShader(this->ShaderID);//compile shader
 		std::string Log=this->GetShaderInfo(this->ShaderID);
-		if(!Log.empty())std::cout<<Log<<std::endl;//print out log
+		if(!Log.empty())std::cerr<<Log<<std::endl;//print out log
 		GLint Status;//status of compilation
 		glGetShaderiv(this->ShaderID,GL_COMPILE_STATUS,&Status);//get status
 		if(Status==GL_FALSE)//something is wrong
