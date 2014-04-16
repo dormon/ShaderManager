@@ -27,6 +27,10 @@ namespace NDormon{
 			 * @brief Destructor
 			 */
 			~CShaderSubroutine();
+      /**
+       * @brief Constructor
+       */
+      CShaderSubroutine();
 	};
 }
 

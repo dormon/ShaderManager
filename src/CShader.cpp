@@ -2,7 +2,9 @@
 
 #include<iostream>
 #include<stdarg.h>
-#include<string.h>
+#include<string>
+#include<cstring>
+#include<fstream>
 
 namespace ShaderManager{
 
@@ -11,7 +13,7 @@ namespace ShaderManager{
 		va_start(args,NumType);//zacatek argumentu
 		for(size_t i=0;i<NumType;++i){
 			char* ext=(char*)va_arg(args,char*);
-			if(FileName.length()-FileName.rfind(ext)==strlen(ext)){//nalezl se
+			if(FileName.length()-FileName.rfind(ext)==std::strlen(ext)){//nalezl se
 				va_end(args);//konec sekvence argumentu
 				return i;//vraceni cisla
 			}

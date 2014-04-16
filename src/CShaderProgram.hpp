@@ -12,12 +12,18 @@
 
 namespace NDormon{
 
+  /**
+   * @brief Initialise shader manager
+   */
+  void InitShaderManager();
+
 	/**
 	 * @brief This class represents shader program
 	 */
 	class CShaderProgram
 	{
-		private:
+		//private:
+    public:
 			std::vector<GLuint>ShaderList;///<list of shader object
 			std::map<std::string,CShaderParameter>AttributeList;///<list of attributes
 			std::map<std::string,CShaderParameter>UniformList;///<list of uniforms
@@ -91,6 +97,76 @@ namespace NDormon{
 					std::string Shader2,
 					std::string Shader3,
 					std::string Shader4);
+      /**
+       * @brief Constructor
+       *
+       * @param Type0 type of shader0
+       * @param Shader0 text of shader0
+       */
+      CShaderProgram(
+          GLenum Type0,std::string Shader0);
+      /**
+       * @brief Constructor
+       *
+       * @param Type0 type of shader0
+       * @param Shader0 text of shader0
+       * @param Type1 type of shader1
+       * @param Shader1 test of shader1
+       */
+      CShaderProgram(
+          GLenum Type0,std::string Shader0,
+          GLenum Type1,std::string Shader1);
+      /**
+       * @brief Constructor
+       *
+       * @param Type0 type of shader0
+       * @param Shader0 text of shader0
+       * @param Type1 type of shader1
+       * @param Shader1 test of shader1
+       * @param Type2 type of shader2
+       * @param Shader2 text of shader2
+       */
+      CShaderProgram(
+          GLenum Type0,std::string Shader0,
+          GLenum Type1,std::string Shader1,
+          GLenum Type2,std::string Shader2);
+      /**
+       * @brief Constructor
+       *
+       * @param Type0 type of shader0
+       * @param Shader0 text of shader0
+       * @param Type1 type of shader1
+       * @param Shader1 test of shader1
+       * @param Type2 type of shader2
+       * @param Shader2 text of shader2
+       * @param Type3 type of shader3
+       * @param Shader3 text of shader3
+       */
+      CShaderProgram(
+          GLenum Type0,std::string Shader0,
+          GLenum Type1,std::string Shader1,
+          GLenum Type2,std::string Shader2,
+          GLenum Type3,std::string Shader3);
+      /**
+       * @brief Constructor
+       *
+       * @param Type0 type of shader0
+       * @param Shader0 text of shader0
+       * @param Type1 type of shader1
+       * @param Shader1 test of shader1
+       * @param Type2 type of shader2
+       * @param Shader2 text of shader2
+       * @param Type3 type of shader3
+       * @param Shader3 text of shader3
+       * @param Type4 type of shader4
+       * @param Shader4 text of shader4
+       */
+      CShaderProgram(
+          GLenum Type0,std::string Shader0,
+          GLenum Type1,std::string Shader1,
+          GLenum Type2,std::string Shader2,
+          GLenum Type3,std::string Shader3,
+          GLenum Type4,std::string Shader4);
 			/**
 			 * @brief Destructor
 			 */

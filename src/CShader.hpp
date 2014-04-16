@@ -2,7 +2,7 @@
 #define _CSHADER_HPP_
 
 #include<GL/glew.h>
-#include<fstream>
+#include<iostream>
 
 namespace NDormon{
 
