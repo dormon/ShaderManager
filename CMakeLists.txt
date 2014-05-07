@@ -11,15 +11,6 @@ add_library(ShaderManager STATIC
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/CMake/modules/")
 
-find_package(SDL REQUIRED)
-if(SDL_FOUND)
-	message("SDL found")
-	include_directories(${SDL_INCLUDE_DIR})
-	target_link_libraries(ShaderManager ${SDL_LIBRARY})
-else(SDL_FOUND)
-	message("SDL not found")
-endif(SDL_FOUND)
-
 find_package(GLEW REQUIRED)
 if(GLEW_FOUND)
 	message("GLEW found")
