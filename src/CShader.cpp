@@ -5,6 +5,7 @@
 #include<string>
 #include<cstring>
 #include<fstream>
+#include<sstream>
 
 namespace ShaderManager{
 
@@ -37,6 +38,67 @@ namespace ShaderManager{
 };
 
 namespace NDormon{
+  GLenum FileToShaderType(std::string File){
+		switch(ShaderManager::FileTypeSwitch(File,12,//number of extensions
+          "vert","vp",  //vertex     shader extension
+          "frag","fp",  //fragment   shader extension
+          "geom","gp",  //geometry   shader extension
+          "cont","cp",  //control    shader extension
+          "eval","ep",  //evaluation shader extension
+          "comp","mp")){//compute    shader extension
+			case 0:
+			case 1:return GL_VERTEX_SHADER;//vertex shader
+			case 2:
+			case 3:return GL_FRAGMENT_SHADER;//fragment shader
+			case 4:
+			case 5:return GL_GEOMETRY_SHADER;//geometry shader
+			case 6:
+			case 7:return GL_TESS_CONTROL_SHADER;//control shader
+			case 8:
+			case 9:return GL_TESS_EVALUATION_SHADER;//evaluation shader
+			case 10:
+			case 11:return GL_COMPUTE_SHADER;//compute shader
+			default:return 0;//unknown
+		}
+  }
+  std::string Define(std::string Name){
+    return"#define "+Name+"\n";
+  }
+
+  std::string Define(std::string Name,unsigned Value){
+    std::stringstream Result;
+    Result<<"#define "<<Name<<" "<<Value<<"u\n";
+    return Result.str();
+  }
+
+  std::string Define(std::string Name,int Value){
+    std::stringstream Result;
+    Result<<"#define "<<Name<<" "<<Value<<"\n";
+    return Result.str();
+  }
+
+  std::string Define(std::string Name,float Value){
+    std::stringstream Result;
+    Result<<"#define "<<Name<<" "<<Value<<"\n";
+    return Result.str();
+  }
+  std::string Define(std::string Name,std::string Value){
+    return"#define "+Name+" "+Value+"\n";
+  }
+
+  //throw std::string("Wrong file extension for shader");
+  void CShader::LoadFile(std::string File){
+		int length;//lenght of file in bytes
+		char*Buffer=(char*)ShaderManager::ReadWholeFile(&length,File);//read whole file
+		this->Text=std::string((char*)Buffer,length);//convert to std::string
+		delete[]Buffer;//free buffer data
+  }
+
+	CShader::CShader(std::string File){
+    this->Type=FileToShaderType(File);
+    this->LoadFile(File);
+		this->CompileShader();
+	}
 
 	CShader::CShader(GLenum type,std::string text){
 		this->Text=text;//text
@@ -44,28 +106,29 @@ namespace NDormon{
 		this->CompileShader();
 	}
 
-	CShader::CShader(std::string File){
-		switch(ShaderManager::FileTypeSwitch(File,12,"vert","vp","frag","fp","geom","gp","cont","cp","eval","ep","comp","mp")){//type
-			case 0:
-			case 1:this->Type=GL_VERTEX_SHADER;break;//vertex shader
-			case 2:
-			case 3:this->Type=GL_FRAGMENT_SHADER;break;//fragment shader
-			case 4:
-			case 5:this->Type=GL_GEOMETRY_SHADER;break;//geometry shader
-			case 6:
-			case 7:this->Type=GL_TESS_CONTROL_SHADER;break;//control shader
-			case 8:
-			case 9:this->Type=GL_TESS_EVALUATION_SHADER;break;//evaluation shader
-			case 10:
-			case 11:this->Type=GL_COMPUTE_SHADER;break;
-			default:throw std::string("Wrong file extension for shader");break;//unknown
-		}
-		int length;//lenght of file in bytes
-		char*Buffer=(char*)ShaderManager::ReadWholeFile(&length,File);//read whole file
-		this->Text=std::string((char*)Buffer,length);//convert to std::string
-		delete[]Buffer;//free buffer data
+  CShader::CShader(std::string File,std::string Defs){
+    this->Type=FileToShaderType(File);
+    this->LoadFile(File);
+    this->AppendAfterVersion(Defs);
 		this->CompileShader();
-	}
+  }
+
+  CShader::CShader(std::string File,std::string Defs,unsigned Version,std::string Profile){
+    this->Type=FileToShaderType(File);
+    this->LoadFile(File);
+    this->AppendAfterVersion(Defs);
+    this->SetVersion(Version,Profile);
+    //std::cerr<<"@@@@@@@"<<this->Text<<"@@@@@@"<<std::endl;
+		this->CompileShader();
+    //std::cerr<<"CompileShader\n";
+  }
+
+  CShader::CShader(std::string File,unsigned Version,std::string Profile){
+    this->Type=FileToShaderType(File);
+    this->LoadFile(File);
+    this->SetVersion(Version,Profile);
+		this->CompileShader();
+  }
 
 	CShader::~CShader(){
 		glDeleteShader(this->ShaderID);//deletes a shader
@@ -98,5 +161,41 @@ namespace NDormon{
 	GLuint CShader::GetShaderID(){
 		return this->ShaderID;//id of shader
 	}
+
+  void CShader::SetVersion(unsigned Version,std::string Profile){
+    if(Version==0)return;
+    int Position=0;
+    while((Position=this->Text.find("#version",Position))>=0){
+      int LineEndPosition=this->Text.find("\n",Position);
+      this->Text.erase(Position,LineEndPosition-Position);
+    }
+
+	  std::stringstream Result;
+    Result<<"#version "<<Version<<" "<<Profile<<"\n";
+    Result<<this->Text;
+    this->Text=Result.str();
+  }
+
+  void CShader::AppendAfterVersion(std::string Defs){
+    if(Defs=="")return;
+    int VersionPosition=0;
+    int LineEndPosition=0;
+    VersionPosition=this->Text.find("#version");
+    LineEndPosition=this->Text.find("\n",VersionPosition);
+    this->Text.insert(LineEndPosition+1,Defs);
+  }
+
+  void CShader::Recompile(){
+    glDeleteShader(this->ShaderID);
+    this->CompileShader();
+  }
+  
+  GLenum CShader::GetType(){
+    return this->Type;
+  }
+
+  std::string CShader::GetText(){
+    return this->Text;
+  }
 
 }
